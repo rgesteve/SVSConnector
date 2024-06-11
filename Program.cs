@@ -3,45 +3,31 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Net.Http.Headers;
 
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Memory;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
+using Microsoft.SemanticKernel.Connectors.Chroma;
+
+#pragma warning disable SKEXP0001, SKEXP0010, SKEXP0020
+
 namespace SVSConnector;
 
 class Program
 {
     static async Task Main(string[] args)
     {
-	//var client = new HttpClient();
 
-	/*
-	var uri = new Uri("http://localhost:5000/control/ping");
-	HttpResponseMessage response =
-          await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, uri));
-
-	string content = new StreamReader(response.Content.ReadAsStream()).ReadToEnd();
-        Console.WriteLine($"Received the response {content}");
-	*/
-
-
-	int[] data = { 11, 42, 25, 3, 4 };
-	/*
-	var jsonData = JsonSerializer.Serialize(data);
-        Console.WriteLine($"The serialized data is: {jsonData}");
-
-	var uri = new Uri("http://localhost:5000/control/array");
-	client.BaseAddress = uri;
-	client.DefaultRequestHeaders.Accept.Clear();
-	client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-	StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-	HttpResponseMessage response = await client.PostAsync("", content);
-
-	if (response.IsSuccessStatusCode) {
-	   string responseString = await response.Content.ReadAsStringAsync();
-           Console.WriteLine($"got the response: {responseString}");
-	} else {
-          Console.WriteLine($"Some problem: {response.StatusCode}");
-	}
-	*/
 	var conn = new SVSConnector();
+	var data = new int[,] {{1,2},{3,4}};
 	await conn.SendMessageAsync(data);
+
+	/*
+	IMemoryStore store = new ChromaMemoryStore("localhost");
+	var embeddingGenerator = new  OpenAITextEmbeddingGenerationService("gpt-35turbo", "endpoint");
+	SemanticTextMemory textMemory = new(store, embeddingGenerator);
+	textMemory.SaveInformationAsync("collection", id: "text1", text: "test");
+	MemoryQueryResult? lookup = await textMemory.GetAsync("collection", "text1");
+	*/
 
         Console.WriteLine("Done!");
     }

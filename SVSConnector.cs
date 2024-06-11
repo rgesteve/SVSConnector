@@ -1,11 +1,15 @@
 using System.Text;
 using System.Net.Http;
-using System.Text.Json;
+//using System.Text.Json; // doesn't support serialization of multi-dimensional arrays
 using System.Net.Http.Headers;
+
+using Newtonsoft.Json;
+
+using Microsoft.Extensions.Logging;
 
 namespace SVSConnector;
 
-class SVSConnector
+public class SVSConnector
 {
    Uri _uri;
    HttpClient _client;
@@ -16,9 +20,14 @@ class SVSConnector
      _uri = new Uri("http://localhost:5000/control/array");
    }
 
-   public async Task SendMessageAsync(int[] data)
+   public SVSConnector(string endpoint, ILoggerFactory? loggerFactory = null)
    {
-     var jsonData = JsonSerializer.Serialize(data);
+   }
+
+   public async Task SendMessageAsync(int[,] data)
+   {
+     //var jsonData = JsonSerializer.Serialize(data);
+     var jsonData = JsonConvert.SerializeObject(data);
 
      _client.BaseAddress = _uri;
      _client.DefaultRequestHeaders.Accept.Clear();
