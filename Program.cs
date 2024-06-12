@@ -22,8 +22,8 @@ class Program
 	await conn.SendMessageAsync(data);
 
 	/*
-	IMemoryStore store = new ChromaMemoryStore("localhost");
-	var embeddingGenerator = new  OpenAITextEmbeddingGenerationService("gpt-35turbo", "endpoint");
+	IMemoryStore store = new SVSMemoryStore("localhost:5000");
+	var embeddingGenerator = new  OpenAITextEmbeddingGenerationService("gpt-35-turbo", "endpoint");
 	SemanticTextMemory textMemory = new(store, embeddingGenerator);
 	textMemory.SaveInformationAsync("collection", id: "text1", text: "test");
 	MemoryQueryResult? lookup = await textMemory.GetAsync("collection", "text1");
